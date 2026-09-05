@@ -1,12 +1,15 @@
-﻿# CMakeList.txt : CMake project for cpp-riemann-sum-approximation, include source and define
-# project specific logic here.
-#
 
-# Add source to this project's executable.
-add_executable (cpp-riemann-sum-approximation "main.cpp" )
+# compile c srcs
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
+	${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/*.cxx
+	${CMAKE_CURRENT_SOURCE_DIR}/*.c
+)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET cpp-riemann-sum-approximation PROPERTY CXX_STANDARD 20)
+
+# make an executable from all source files
+if (SRC_FILES)
+  add_executable(cpp-riemann-sum-approximation ${SRC_FILES})
+else()
+  message(FATAL_ERROR "No source files found in ${CMAKE_CURRENT_SOURCE_DIR}. Add main.cpp or other source files.")
 endif()
-
-# TODO: Add tests and install targets if needed.
