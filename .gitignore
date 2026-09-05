@@ -1,0 +1,9 @@
+# Visual Studio metadata and temp files
+.vs/
+*.slnx
+*.vcxproj.user
+
+# Build directories
+build/
+out/
+bin/
