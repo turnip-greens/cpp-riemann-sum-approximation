@@ -9,16 +9,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # FetchContent gets external dependencies
 include(FetchContent)
 
-# Get GLFW from github
-FetchContent_Declare(
-    glfw
-    GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG        3.4
-)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(glfw)
+if(EMSCRIPTEN)
+    # WebAssembly (Emscripten) mode
+    # Use Emscripten's built-in GLFW port instead of fetching desktop GLFW source
+    set(EMSCRIPTEN_FLAGS 
+        "-sUSE_GLFW=3"
+        "-sMIN_WEBGL_VERSION=2"
+        "-sMAX_WEBGL_VERSION=2"
+    )
+else()
+    # Desktop mode: Fetch GLFW from GitHub
+    FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG        3.4
+    )
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(glfw)
+
+    # Cross-platform OpenGL target lookup for desktop
+    find_package(OpenGL REQUIRED)
+endif()
 
 # Get ImGui from github
 FetchContent_Declare(
@@ -44,12 +57,22 @@ target_include_directories(imgui PUBLIC
     ${imgui_SOURCE_DIR}/backends
 )
 
-
-# link glfw and opengl32 libs 
-target_link_libraries(imgui PUBLIC glfw opengl32)
+if(EMSCRIPTEN)
+    target_compile_options(imgui PUBLIC ${EMSCRIPTEN_FLAGS})
+    target_link_options(imgui PUBLIC ${EMSCRIPTEN_FLAGS})
+else()
+    target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
+endif()
 
 # add executable 
 add_executable(${PROJECT_NAME} main.cpp)
 
 # link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
+
+if(EMSCRIPTEN)
+    # Pass Emscripten flags and generate index.html alongside .wasm
+    target_compile_options(${PROJECT_NAME} PRIVATE ${EMSCRIPTEN_FLAGS})
+    target_link_options(${PROJECT_NAME} PRIVATE ${EMSCRIPTEN_FLAGS})
+    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+endif()
