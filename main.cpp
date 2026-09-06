@@ -107,7 +107,13 @@ void render_frame(void* window_ptr)
     ImGui::Text("d: "); ImGui::SameLine();
     ImGui::InputFloat("##d", &c, 0.0f, 0.0f, "%.1f");
     
-    ImGui::Text("f(x) = %s%s%s%s", format("x³", s3).c_str(), format("x²", s2).c_str(), format("x", s1).c_str(), format("", c).c_str());
+    std::string func_str = "f(x) =" + 
+                           format("x^3", s3) + 
+                           format("x^2", s2) + 
+                           format("x", s1) + 
+                           format("", c);
+
+    ImGui::TextUnformatted(func_str.c_str());
     ImGui::Separator();
 
     ImGui::Text("Define Interval: ");

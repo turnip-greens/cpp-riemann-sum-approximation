@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(cpp-riemann-sum-approximation VERSION 0.1.0 LANGUAGES C CXX)
 
-# Set C++ standard to C++20
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -10,12 +10,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(FetchContent)
 
 if(EMSCRIPTEN)
-    # WebAssembly (Emscripten) mode
-    # Use Emscripten's built-in GLFW port instead of fetching desktop GLFW source
+    # WebAssembly (Emscripten) mode flags
     set(EMSCRIPTEN_FLAGS 
         "-sUSE_GLFW=3"
+        "-sFULL_ES3=1"
         "-sMIN_WEBGL_VERSION=2"
         "-sMAX_WEBGL_VERSION=2"
+        "-sFORCE_FILESYSTEM=1"
+        "-sEXIT_RUNTIME=0"
     )
 else()
     # Desktop mode: Fetch GLFW from GitHub
@@ -64,10 +66,10 @@ else()
     target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
 endif()
 
-# add executable 
+# Add executable 
 add_executable(${PROJECT_NAME} main.cpp)
 
-# link libraries
+# Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui)
 
 if(EMSCRIPTEN)
