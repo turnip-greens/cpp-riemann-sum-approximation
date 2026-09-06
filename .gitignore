@@ -1,0 +1,54 @@
+# ==========================================
+# CMake Build Artifacts & Directories
+# ==========================================
+# Standard local build directories
+build/
+build*/
+out/
+bin/
+lib/
+
+# CMake cache and intermediate configuration files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CMakeCheckOutputs/
+
+# Testing and installation tracking
+Testing/
+CTestTestfile.cmake
+cmake_install.cmake
+install_manifest.txt
+
+# Generated build files depending on your generator (Make, Ninja, etc.)
+Makefile
+*.cmake
+*.ninja
+.ninja_deps
+.ninja_log
+
+# Tooling and compiler outputs
+compile_commands.json
+*.pyc
+
+# ==========================================
+# IDE and Local Environment Specifics
+# ==========================================
+# CLion and JetBrains
+.idea/
+cmake-build-*/
+
+# Visual Studio Code
+.vscode/
+.cache/
+
+# Visual Studio (MSVC)
+.vs/
+
+# QtCreator
+CMakeLists.txt.user*
+
+# ==========================================
+# User Presets (Keep your local configs private)
+# ==========================================
+CMakeUserPresets.json
