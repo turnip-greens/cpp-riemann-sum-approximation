@@ -108,8 +108,8 @@ void render_frame(void* window_ptr)
     ImGui::InputFloat("##d", &c, 0.0f, 0.0f, "%.1f");
     
     std::string func_str = "f(x) =" + 
-                           format("x^3", s3) + 
-                           format("x^2", s2) + 
+                           format("x³", s3) + 
+                           format("x²", s2) + 
                            format("x", s1) + 
                            format("", c);
 
@@ -146,7 +146,7 @@ void render_frame(void* window_ptr)
 
     if (successfully_calculated)
     {
-        ImGui::Text("%.2f<->%.2f ∫ f(x) dx = %.6f", lower_bound, upper_bound, answer);
+        ImGui::Text("Area under curve: %.6f", answer);
     }
 
     ImGui::End();
